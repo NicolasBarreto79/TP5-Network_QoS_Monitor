@@ -1,0 +1,29 @@
+{
+  "name": "network-qos-monitor-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Network QoS Monitor - Analizador y visualizador de calidad de red móvil en tiempo real con mapeo de cobertura personal",
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:contracts": "npm run test --workspace @qos-monitor/contracts",
+    "test:backend": "npm run test --workspace @qos-monitor/reference-backend",
+    "test:app": "npm run test --workspace @qos-monitor/app",
+    "start:backend": "npm run dev --workspace @qos-monitor/reference-backend",
+    "start:app": "npm run start --workspace @qos-monitor/app",
+    "backend:docker": "docker compose up --build",
+    "backend:docker:down": "docker compose down",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

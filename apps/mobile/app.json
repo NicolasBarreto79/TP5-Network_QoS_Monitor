@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "Network QoS Monitor",
+    "slug": "network-qos-monitor",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0B0F19"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.networkqosmonitor.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Esta aplicación requiere acceso a tu ubicación para georreferenciar las métricas de calidad de red y construir el mapa de cobertura.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Se requiere ubicación en segundo plano para el muestreo periódico de calidad de red incluso con la app cerrada.",
+        "UIBackgroundModes": ["location", "fetch", "processing"]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0B0F19"
+      },
+      "package": "com.networkqosmonitor",
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.READ_PHONE_STATE",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_DATA_SYNC",
+        "android.permission.WAKE_LOCK"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Permite a Network QoS Monitor evaluar cobertura en segundo plano."
+        }
+      ]
+    ]
+  }
+}

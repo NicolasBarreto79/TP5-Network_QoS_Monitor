@@ -14,6 +14,7 @@ export const SpeedtestScreen: React.FC = () => {
   const {
     isTesting,
     activeTestStage,
+    statusMessage,
     throughputProgress,
     latestThroughput,
     backendUrl,
@@ -140,6 +141,15 @@ export const SpeedtestScreen: React.FC = () => {
           </Text>
         </View>
       </View>
+
+      {/* Live status banner */}
+      {isTesting && (
+        <View style={{ alignItems: 'center', marginBottom: 12 }}>
+          <Text style={{ color: '#00F0FF', fontSize: 13, fontWeight: '600' }}>
+            {statusMessage}
+          </Text>
+        </View>
+      )}
 
       {/* Action Button */}
       <TouchableOpacity

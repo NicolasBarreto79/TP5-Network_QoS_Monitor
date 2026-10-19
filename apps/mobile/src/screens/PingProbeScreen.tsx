@@ -14,6 +14,7 @@ export const PingProbeScreen: React.FC = () => {
     isTesting,
     pingTargets,
     latestPingResults,
+    statusMessage,
     runPingTestOnly,
   } = useQoSStore();
 
@@ -146,6 +147,15 @@ export const PingProbeScreen: React.FC = () => {
           {'\n'}Mide la estabilidad temporal de los paquetes, esencial para servicios en tiempo real.
         </Text>
       </View>
+
+      {/* Status feedback */}
+      {isTesting && (
+        <View style={{ alignItems: 'center', marginBottom: 12 }}>
+          <Text style={{ color: '#00F0FF', fontSize: 13, fontWeight: '600' }}>
+            {statusMessage}
+          </Text>
+        </View>
+      )}
 
       {/* Action Button */}
       <TouchableOpacity

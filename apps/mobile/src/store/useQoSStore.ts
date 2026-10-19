@@ -337,12 +337,36 @@ export const useQoSStore = create<QoSStoreState>((set, get) => ({
     const state = get();
     if (state.isTesting) return;
 
-    set({ isTesting: true, activeTestStage: 'ping', statusMessage: 'Midiendo RTT / Jitter...' });
+    set({ isTesting: true, activeTestStage: 'ping', statusMessage: 'Midiendo RTT y Jitter RFC 3550...' });
     try {
-      const pingStatsList = await PingEngine.probeAll(state.pingTargets, 5);
-      set({ latestPingResults: pingStatsList, isTesting: false, activeTestStage: 'completed' });
-    } catch {
-      set({ isTesting: false, activeTestStage: 'idle' });
+      const cleanUrl = state.backendUrl.trim().replace(/\/$/, '');
+      const targets = state.pingTargets.map((t) =>
+        t.name.includes('Backend') ? { ...t, host: 'localhost', url: `${cleanUrl}/api/ping` } : t
+      );
+
+      const pingStatsList = await PingEngine.probeAll(
+        targets,
+        4,
+        (targetStats) => {
+          set((prev) => {
+            const existing = prev.latestPingResults.filter((p) => p.host !== targetStats.host);
+            return {
+              latestPingResults: [...existing, targetStats],
+              statusMessage: `Sondeo OK: ${targetStats.host} (${targetStats.avgRttMs} ms)`,
+            };
+          });
+        }
+      );
+
+      set({
+        latestPingResults: pingStatsList,
+        isTesting: false,
+        activeTestStage: 'completed',
+        statusMessage: 'Sondeo completado con éxito.',
+      });
+    } catch (err) {
+      console.warn('[PingEngine] Error:', err);
+      set({ isTesting: false, activeTestStage: 'idle', statusMessage: 'Error en sondeo.' });
     }
   },
 
@@ -350,22 +374,71 @@ export const useQoSStore = create<QoSStoreState>((set, get) => ({
     const state = get();
     if (state.isTesting) return;
 
-    set({ isTesting: true, activeTestStage: 'download', statusMessage: 'Midiendo velocidad...' });
+    set({
+      isTesting: true,
+      activeTestStage: 'download',
+      statusMessage: `Descargando ${state.downloadSizeMb} MB...`,
+      throughputProgress: {
+        stage: 'download',
+        percent: 0,
+        instantSpeedMbps: 0,
+        transferredBytes: 0,
+        totalBytes: state.downloadSizeMb * 1024 * 1024,
+      },
+    });
+
     try {
-      const dl = await ThroughputEngine.runDownloadTest(state.backendUrl, state.downloadSizeMb);
-      const ul = await ThroughputEngine.runUploadTest(state.backendUrl, state.uploadSizeMb);
+      const dl = await ThroughputEngine.runDownloadTest(
+        state.backendUrl,
+        state.downloadSizeMb,
+        (prog) => {
+          set({ throughputProgress: prog, statusMessage: `Descargando: ${prog.instantSpeedMbps} Mbps` });
+        }
+      );
+
+      set({
+        activeTestStage: 'upload',
+        statusMessage: `Subiendo ${state.uploadSizeMb} MB...`,
+        throughputProgress: {
+          stage: 'upload',
+          percent: 0,
+          instantSpeedMbps: 0,
+          transferredBytes: 0,
+          totalBytes: state.uploadSizeMb * 1024 * 1024,
+        },
+      });
+
+      const ul = await ThroughputEngine.runUploadTest(
+        state.backendUrl,
+        state.uploadSizeMb,
+        (prog) => {
+          set({ throughputProgress: prog, statusMessage: `Subiendo: ${prog.instantSpeedMbps} Mbps` });
+        }
+      );
+
       set({
         latestThroughput: { download: dl, upload: ul },
         isTesting: false,
         activeTestStage: 'completed',
+        statusMessage: `Throughput completado: Bajada ${dl.speedMbps} Mbps / Subida ${ul.speedMbps} Mbps`,
       });
-    } catch {
-      set({ isTesting: false, activeTestStage: 'idle' });
+    } catch (err) {
+      console.warn('[ThroughputEngine] Error:', err);
+      set({ isTesting: false, activeTestStage: 'idle', statusMessage: 'Error en test de velocidad.' });
     }
   },
 
   updateSettings: (newSettings) => {
-    set((state) => ({ ...state, ...newSettings }));
+    set((state) => {
+      const updated = { ...state, ...newSettings };
+      if (newSettings.backendUrl) {
+        const cleanUrl = newSettings.backendUrl.trim().replace(/\/$/, '');
+        updated.pingTargets = updated.pingTargets.map((t) =>
+          t.name.includes('Backend') ? { ...t, url: `${cleanUrl}/api/ping` } : t
+        );
+      }
+      return updated;
+    });
   },
 
   clearHistory: async () => {

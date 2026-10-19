@@ -8,9 +8,9 @@ export interface PingTarget {
 }
 
 export const DEFAULT_PING_TARGETS: PingTarget[] = [
-  { name: 'Cloudflare DNS', host: '1.1.1.1', url: 'https://1.1.1.1/cdn-cgi/trace' },
+  { name: 'Cloudflare DNS', host: '1.1.1.1', url: 'https://cloudflare-dns.com/dns-query?name=example.com&type=A' },
   { name: 'Google DNS', host: '8.8.8.8', url: 'https://dns.google/resolve?name=example.com' },
-  { name: 'Backend QoS Ref', host: '10.0.2.2', url: 'http://10.0.2.2:3000/api/ping' },
+  { name: 'Backend QoS Ref', host: 'localhost', url: 'http://localhost:3000/api/ping' },
 ];
 
 export class PingEngine {
@@ -30,9 +30,9 @@ export class PingEngine {
       if (onProgress) {
         onProgress(seq, rtt);
       }
-      // Pequeña pausa entre paquetes para simular ráfagas reales (100ms)
+      // Pequeña pausa entre paquetes para simular ráfagas reales (80ms)
       if (seq < packetCount) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 80));
       }
     }
 
@@ -66,7 +66,7 @@ export class PingEngine {
   private static async singleProbe(target: PingTarget): Promise<number | null> {
     const url = target.url || `http://${target.host}:${target.port ?? 80}/`;
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2500); // 2.5s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 1200); // 1.2s timeout
 
     const startTime = performance.now();
     try {
@@ -82,8 +82,8 @@ export class PingEngine {
       clearTimeout(timeoutId);
       const endTime = performance.now();
 
-      if (res.ok || res.status === 404 || res.status === 200) {
-        return Number((endTime - startTime).toFixed(2));
+      if (res.ok || res.status === 404 || res.status === 200 || res.type === 'opaque' || res.status === 0) {
+        return Math.max(1, Number((endTime - startTime).toFixed(2)));
       }
       return null;
     } catch {

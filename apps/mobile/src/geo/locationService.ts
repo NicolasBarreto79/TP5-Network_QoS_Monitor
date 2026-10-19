@@ -1,5 +1,11 @@
-import * as Location from 'expo-location';
 import { GeoPoint } from '@qos-monitor/contracts';
+
+let LocationModule: any = null;
+try {
+  LocationModule = require('expo-location');
+} catch {
+  // Node test runner environment fallback
+}
 
 export class LocationService {
   private static defaultLocation: GeoPoint = {
@@ -17,8 +23,11 @@ export class LocationService {
    */
   static async requestPermissions(): Promise<boolean> {
     try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      return status === 'granted';
+      if (LocationModule && typeof LocationModule.requestForegroundPermissionsAsync === 'function') {
+        const { status } = await LocationModule.requestForegroundPermissionsAsync();
+        return status === 'granted';
+      }
+      return false;
     } catch {
       return false;
     }
@@ -30,12 +39,12 @@ export class LocationService {
   static async getCurrentLocation(): Promise<GeoPoint> {
     try {
       const hasPermission = await this.requestPermissions();
-      if (!hasPermission) {
+      if (!hasPermission || !LocationModule || typeof LocationModule.getCurrentPositionAsync !== 'function') {
         return { ...this.defaultLocation, timestamp: Date.now() };
       }
 
-      const position = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
+      const position = await LocationModule.getCurrentPositionAsync({
+        accuracy: LocationModule.Accuracy?.High ?? 4,
       });
 
       return {
@@ -51,3 +60,4 @@ export class LocationService {
     }
   }
 }
+

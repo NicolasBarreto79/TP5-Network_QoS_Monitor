@@ -115,29 +115,44 @@ export default function App() {
     }
   };
 
+  const isDashboard = activeTab === 'dashboard';
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#0B0F19" />
-      <View style={styles.container}>
+    <SafeAreaView style={[styles.safeArea, isDashboard && styles.safeAreaLight]}>
+      <StatusBar
+        barStyle={isDashboard ? 'dark-content' : 'light-content'}
+        backgroundColor={isDashboard ? '#F8FAFC' : '#0B0F19'}
+      />
+      <View style={[styles.container, isDashboard && styles.containerLight]}>
         {/* Main Screen Body */}
         <View style={styles.screenContainer}>{renderActiveScreen()}</View>
 
         {/* Bottom Navigation Bar */}
-        <View style={styles.navBar}>
+        <View style={[styles.navBar, isDashboard && styles.navBarLight]}>
           {navItems.map((item) => {
             const isActive = activeTab === item.key;
-            const iconColor = isActive ? '#00F0FF' : '#64748B';
+            const iconColor = isActive
+              ? (isDashboard ? '#0284C7' : '#00F0FF')
+              : '#64748B';
             return (
               <TouchableOpacity
                 key={item.key}
-                style={[styles.navItem, isActive && styles.navItemActive]}
+                style={[
+                  styles.navItem,
+                  isActive && (isDashboard ? styles.navItemActiveLight : styles.navItemActive),
+                ]}
                 onPress={() => setActiveTab(item.key)}
                 activeOpacity={0.7}
               >
                 <View style={styles.navIconContainer}>
                   {renderNavIcon(item.key, iconColor)}
                 </View>
-                <Text style={[styles.navLabel, isActive && styles.navLabelActive]}>
+                <Text
+                  style={[
+                    styles.navLabel,
+                    isActive && (isDashboard ? styles.navLabelActiveLight : styles.navLabelActive),
+                  ]}
+                >
                   {item.label}
                 </Text>
               </TouchableOpacity>
@@ -154,9 +169,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0B0F19',
   },
+  safeAreaLight: {
+    backgroundColor: '#F8FAFC',
+  },
   container: {
     flex: 1,
     backgroundColor: '#0B0F19',
+  },
+  containerLight: {
+    backgroundColor: '#F8FAFC',
   },
   screenContainer: {
     flex: 1,
@@ -170,6 +191,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     justifyContent: 'space-around',
   },
+  navBarLight: {
+    backgroundColor: '#FFFFFF',
+    borderTopColor: '#E2E8F0',
+  },
   navItem: {
     alignItems: 'center',
     paddingVertical: 4,
@@ -178,6 +203,9 @@ const styles = StyleSheet.create({
   },
   navItemActive: {
     backgroundColor: '#1E293B',
+  },
+  navItemActiveLight: {
+    backgroundColor: '#F0F9FF',
   },
   navIconContainer: {
     height: 20,
@@ -192,6 +220,10 @@ const styles = StyleSheet.create({
   },
   navLabelActive: {
     color: '#00F0FF',
+    fontWeight: '800',
+  },
+  navLabelActiveLight: {
+    color: '#0284C7',
     fontWeight: '800',
   },
 });

@@ -4,9 +4,10 @@ import { View, Text, StyleSheet } from 'react-native';
 interface SignalBarsProps {
   rssiDbm?: number | null;
   networkType: string;
+  theme?: 'light' | 'dark';
 }
 
-export const SignalBars: React.FC<SignalBarsProps> = ({ rssiDbm, networkType }) => {
+export const SignalBars: React.FC<SignalBarsProps> = ({ rssiDbm, networkType, theme = 'light' }) => {
   const getBarLevel = (dbm?: number | null): number => {
     if (dbm == null) return 3;
     if (dbm >= -70) return 5;
@@ -19,11 +20,13 @@ export const SignalBars: React.FC<SignalBarsProps> = ({ rssiDbm, networkType }) 
   const level = getBarLevel(rssiDbm);
 
   const getBarColor = (index: number) => {
-    if (index > level) return '#1E293B';
-    if (level >= 4) return '#10B981'; // Green
-    if (level === 3) return '#00F0FF'; // Cyan
-    if (level === 2) return '#F59E0B'; // Amber
-    return '#EF4444'; // Red
+    if (index > level) {
+      return theme === 'light' ? '#E2E8F0' : '#1E293B';
+    }
+    if (level >= 4) return '#10B981'; // Emerald Green
+    if (level === 3) return '#0284C7'; // Vivid Sky Blue
+    if (level === 2) return '#F59E0B'; // Amber Warning
+    return '#EF4444'; // Red Alert
   };
 
   return (
@@ -42,7 +45,7 @@ export const SignalBars: React.FC<SignalBarsProps> = ({ rssiDbm, networkType }) 
           />
         ))}
       </View>
-      <Text style={styles.dbmText}>
+      <Text style={[styles.dbmText, theme === 'light' ? styles.dbmTextLight : styles.dbmTextDark]}>
         {rssiDbm != null ? `${Math.round(rssiDbm)} dBm` : '-- dBm'}
       </Text>
     </View>
@@ -65,10 +68,15 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   dbmText: {
-    color: '#94A3B8',
     fontSize: 11,
     marginTop: 4,
-    fontWeight: '600',
+    fontWeight: '700',
     fontVariant: ['tabular-nums'],
+  },
+  dbmTextLight: {
+    color: '#475569',
+  },
+  dbmTextDark: {
+    color: '#94A3B8',
   },
 });

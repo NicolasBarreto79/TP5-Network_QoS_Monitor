@@ -23,42 +23,95 @@ export const DashboardScreen: React.FC = () => {
     latestQoS,
     latestPingResults,
     latestThroughput,
+    alerts,
     refreshNetworkStatus,
     runFullQoSTest,
   } = useQoSStore();
 
-  const getNetworkTypeColor = (type: string) => {
+  const getNetworkBadgeStyle = (type: string) => {
     switch (type) {
       case '5g':
-        return '#8B5CF6'; // Purple / 5G
+        return {
+          bg: '#F3E8FF',
+          border: '#DDD6FE',
+          text: '#6D28D9',
+          dot: '#7C3AED',
+        };
       case '4g':
-        return '#00F0FF'; // Cyan / 4G
+        return {
+          bg: '#E0F2FE',
+          border: '#BAE6FD',
+          text: '#0369A1',
+          dot: '#0284C7',
+        };
       case '3g':
-        return '#F59E0B'; // Amber / 3G
+        return {
+          bg: '#FEF3C7',
+          border: '#FDE68A',
+          text: '#B45309',
+          dot: '#D97706',
+        };
       case 'wifi':
-        return '#10B981'; // Green / WiFi
+        return {
+          bg: '#D1FAE5',
+          border: '#A7F3D0',
+          text: '#047857',
+          dot: '#059669',
+        };
       default:
-        return '#64748B';
+        return {
+          bg: '#F1F5F9',
+          border: '#E2E8F0',
+          text: '#475569',
+          dot: '#64748B',
+        };
     }
   };
 
-  const getQoSCategoryColor = (category?: string) => {
+  const getQoSCategoryStyle = (category?: string) => {
     switch (category) {
       case 'EXCELLENT':
-        return '#10B981';
+        return {
+          bg: '#D1FAE5',
+          border: '#A7F3D0',
+          text: '#047857',
+          color: '#059669',
+        };
       case 'GOOD':
-        return '#00F0FF';
+        return {
+          bg: '#E0F2FE',
+          border: '#BAE6FD',
+          text: '#0369A1',
+          color: '#0284C7',
+        };
       case 'FAIR':
-        return '#F59E0B';
+        return {
+          bg: '#FEF3C7',
+          border: '#FDE68A',
+          text: '#B45309',
+          color: '#D97706',
+        };
       case 'POOR':
       case 'CRITICAL':
-        return '#EF4444';
+        return {
+          bg: '#FEE2E2',
+          border: '#FECACA',
+          text: '#B91C1C',
+          color: '#DC2626',
+        };
       default:
-        return '#64748B';
+        return {
+          bg: '#F1F5F9',
+          border: '#E2E8F0',
+          text: '#475569',
+          color: '#64748B',
+        };
     }
   };
 
   const primaryPing = latestPingResults[0];
+  const badgeStyle = getNetworkBadgeStyle(network.type);
+  const qosStyle = getQoSCategoryStyle(latestQoS?.category);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -72,9 +125,10 @@ export const DashboardScreen: React.FC = () => {
           style={styles.refreshBtn}
           onPress={refreshNetworkStatus}
           disabled={isNetworkLoading || isTesting}
+          activeOpacity={0.7}
         >
           {isNetworkLoading ? (
-            <ActivityIndicator size="small" color="#00F0FF" />
+            <ActivityIndicator size="small" color="#0284C7" />
           ) : (
             <Text style={styles.refreshText}>ACTUALIZAR</Text>
           )}
@@ -88,19 +142,22 @@ export const DashboardScreen: React.FC = () => {
             <View
               style={[
                 styles.techBadge,
-                { backgroundColor: getNetworkTypeColor(network.type) + '22' },
+                {
+                  backgroundColor: badgeStyle.bg,
+                  borderColor: badgeStyle.border,
+                },
               ]}
             >
               <View
                 style={[
                   styles.pulseDot,
-                  { backgroundColor: getNetworkTypeColor(network.type) },
+                  { backgroundColor: badgeStyle.dot },
                 ]}
               />
               <Text
                 style={[
                   styles.techBadgeText,
-                  { color: getNetworkTypeColor(network.type) },
+                  { color: badgeStyle.text },
                 ]}
               >
                 {network.type.toUpperCase()}
@@ -113,6 +170,7 @@ export const DashboardScreen: React.FC = () => {
           <SignalBars
             rssiDbm={network.cellular?.rssiDbm}
             networkType={network.type}
+            theme="light"
           />
         </View>
 
@@ -161,6 +219,21 @@ export const DashboardScreen: React.FC = () => {
         </View>
       </View>
 
+      {/* Degradation Alert Banner (RF-07) if active */}
+      {alerts && alerts.length > 0 && (
+        <View style={styles.alertCard}>
+          <View style={styles.alertHeader}>
+            <View style={styles.alertBadge}>
+              <Text style={styles.alertBadgeText}>ALERTA DE DEGRADACIÓN</Text>
+            </View>
+            <Text style={styles.alertMetric}>
+              {alerts[0].metricName.toUpperCase()}
+            </Text>
+          </View>
+          <Text style={styles.alertMessage}>{alerts[0].reason}</Text>
+        </View>
+      )}
+
       {/* Compound QoS Score Card */}
       <View style={styles.card}>
         <View style={styles.qosHeader}>
@@ -169,13 +242,16 @@ export const DashboardScreen: React.FC = () => {
             <View
               style={[
                 styles.categoryBadge,
-                { backgroundColor: getQoSCategoryColor(latestQoS.category) + '22' },
+                {
+                  backgroundColor: qosStyle.bg,
+                  borderColor: qosStyle.border,
+                },
               ]}
             >
               <Text
                 style={[
                   styles.categoryText,
-                  { color: getQoSCategoryColor(latestQoS.category) },
+                  { color: qosStyle.text },
                 ]}
               >
                 {latestQoS.category}
@@ -189,7 +265,7 @@ export const DashboardScreen: React.FC = () => {
             <Text
               style={[
                 styles.scoreNumber,
-                { color: getQoSCategoryColor(latestQoS?.category) },
+                { color: qosStyle.color },
               ]}
             >
               {latestQoS ? latestQoS.score : '--'}
@@ -199,7 +275,7 @@ export const DashboardScreen: React.FC = () => {
           <View style={styles.scoreDetails}>
             <Text style={styles.mosText}>
               MOS Estimado:{' '}
-              <Text style={{ color: '#00F0FF', fontWeight: '800' }}>
+              <Text style={{ color: '#0284C7', fontWeight: '800' }}>
                 {latestQoS ? `${latestQoS.mosEstimated} / 5.0` : '--'}
               </Text>
             </Text>
@@ -265,7 +341,7 @@ export const DashboardScreen: React.FC = () => {
           activeOpacity={0.8}
         >
           {isTesting ? (
-            <ActivityIndicator size="small" color="#0B0F19" />
+            <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
             <Text style={styles.mainActionBtnText}>EJECUTAR TEST COMPLETO DE QoS</Text>
           )}
@@ -279,43 +355,55 @@ export const DashboardScreen: React.FC = () => {
         </Text>
         <View style={styles.scenarioRow}>
           <TouchableOpacity
-            style={[styles.scenarioBtn, { borderColor: '#8B5CF6' }]}
+            style={[
+              styles.scenarioBtn,
+              { borderColor: '#7C3AED', backgroundColor: '#FAF5FF' },
+            ]}
             onPress={async () => {
               TelephonyBridge.setMockScenario('EXCELLENT_5G');
               await refreshNetworkStatus();
             }}
           >
-            <Text style={[styles.scenarioBtnText, { color: '#8B5CF6' }]}>5G NR</Text>
+            <Text style={[styles.scenarioBtnText, { color: '#7C3AED' }]}>5G NR</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.scenarioBtn, { borderColor: '#00F0FF' }]}
+            style={[
+              styles.scenarioBtn,
+              { borderColor: '#0284C7', backgroundColor: '#F0F9FF' },
+            ]}
             onPress={async () => {
               TelephonyBridge.setMockScenario('GOOD_4G');
               await refreshNetworkStatus();
             }}
           >
-            <Text style={[styles.scenarioBtnText, { color: '#00F0FF' }]}>4G ÓPTIMO</Text>
+            <Text style={[styles.scenarioBtnText, { color: '#0284C7' }]}>4G ÓPTIMO</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.scenarioBtn, { borderColor: '#F59E0B' }]}
+            style={[
+              styles.scenarioBtn,
+              { borderColor: '#D97706', backgroundColor: '#FFFBEB' },
+            ]}
             onPress={async () => {
               TelephonyBridge.setMockScenario('WEAK_4G');
               await refreshNetworkStatus();
             }}
           >
-            <Text style={[styles.scenarioBtnText, { color: '#F59E0B' }]}>4G DÉBIL</Text>
+            <Text style={[styles.scenarioBtnText, { color: '#D97706' }]}>4G DÉBIL</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.scenarioBtn, { borderColor: '#EF4444' }]}
+            style={[
+              styles.scenarioBtn,
+              { borderColor: '#DC2626', backgroundColor: '#FEF2F2' },
+            ]}
             onPress={async () => {
               TelephonyBridge.setMockScenario('CRITICAL_3G');
               await refreshNetworkStatus();
             }}
           >
-            <Text style={[styles.scenarioBtnText, { color: '#EF4444' }]}>3G CRÍTICO</Text>
+            <Text style={[styles.scenarioBtnText, { color: '#DC2626' }]}>3G CRÍTICO</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -326,7 +414,7 @@ export const DashboardScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
   },
   content: {
     padding: 16,
@@ -340,43 +428,53 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   headerSubtitle: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1.5,
   },
   headerTitle: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 22,
     fontWeight: '800',
   },
   refreshBtn: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#E2E8F0',
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 1,
   },
   refreshText: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 11,
     fontWeight: '700',
   },
   card: {
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
     marginBottom: 16,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 2,
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#1F2937',
+    borderBottomColor: '#F1F5F9',
     paddingBottom: 12,
     marginBottom: 12,
   },
@@ -391,6 +489,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
+    borderWidth: 1,
     gap: 6,
   },
   pulseDot: {
@@ -404,7 +503,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   carrierText: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 16,
     fontWeight: '700',
   },
@@ -415,11 +514,11 @@ const styles = StyleSheet.create({
   },
   radioItem: {
     width: '31%',
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F8FAFC',
     borderRadius: 8,
     padding: 8,
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
   },
   radioLabel: {
     color: '#64748B',
@@ -428,9 +527,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   radioValue: {
-    color: '#E2E8F0',
+    color: '#0F172A',
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: '800',
     marginTop: 2,
     fontVariant: ['tabular-nums'],
   },
@@ -440,7 +539,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: '#1F2937',
+    borderTopColor: '#F1F5F9',
     gap: 6,
   },
   geoLabel: {
@@ -449,9 +548,46 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   geoCoords: {
-    color: '#94A3B8',
+    color: '#334155',
     fontSize: 11,
+    fontWeight: '600',
     fontVariant: ['tabular-nums'],
+  },
+  alertCard: {
+    backgroundColor: '#FEF2F2',
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#FECACA',
+    marginBottom: 16,
+  },
+  alertHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  alertBadge: {
+    backgroundColor: '#DC2626',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  alertBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  alertMetric: {
+    color: '#991B1B',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  alertMessage: {
+    color: '#7F1D1D',
+    fontSize: 12,
+    fontWeight: '500',
   },
   qosHeader: {
     flexDirection: 'row',
@@ -460,7 +596,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   cardTitle: {
-    color: '#94A3B8',
+    color: '#475569',
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 1,
@@ -469,6 +605,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: 6,
+    borderWidth: 1,
   },
   categoryText: {
     fontSize: 11,
@@ -484,12 +621,12 @@ const styles = StyleSheet.create({
   scoreDial: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
   },
   scoreNumber: {
     fontSize: 36,
@@ -506,7 +643,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mosText: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 14,
     fontWeight: '700',
   },
@@ -523,12 +660,12 @@ const styles = StyleSheet.create({
   },
   kpiTile: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
     borderRadius: 8,
     padding: 8,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
   },
   kpiLabel: {
     color: '#64748B',
@@ -537,7 +674,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   kpiValue: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 13,
     fontWeight: '800',
     marginTop: 4,
@@ -551,52 +688,57 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     height: 6,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#E2E8F0',
     borderRadius: 3,
     overflow: 'hidden',
     marginBottom: 6,
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#00F0FF',
+    backgroundColor: '#0284C7',
   },
   statusText: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 12,
     fontWeight: '600',
     textAlign: 'center',
   },
   mainActionBtn: {
-    backgroundColor: '#00F0FF',
+    backgroundColor: '#0284C7',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#00F0FF',
+    shadowColor: '#0284C7',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 4,
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 3,
   },
   mainActionBtnDisabled: {
     opacity: 0.6,
   },
   mainActionBtnText: {
-    color: '#0B0F19',
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '900',
+    fontWeight: '800',
     letterSpacing: 1,
   },
   simulationCard: {
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
     marginTop: 8,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   simulationTitle: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1,
@@ -609,11 +751,10 @@ const styles = StyleSheet.create({
   },
   scenarioBtn: {
     flex: 1,
-    backgroundColor: '#0B0F19',
     paddingVertical: 8,
     borderRadius: 8,
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 1.5,
   },
   scenarioBtnText: {
     fontSize: 10,

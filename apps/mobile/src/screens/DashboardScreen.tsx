@@ -109,7 +109,24 @@ export const DashboardScreen: React.FC = () => {
     }
   };
 
-  const primaryPing = latestPingResults[0];
+  const getMosDescription = (category?: string) => {
+    switch (category) {
+      case 'EXCELLENT':
+        return 'Excelente: apto para streaming 4K, videollamadas HD y gaming competitivo (RFC 2544).';
+      case 'GOOD':
+        return 'Bueno: apto para streaming 1080p, videollamadas fluidas y navegación ágil.';
+      case 'FAIR':
+        return 'Aceptable: adecuado para navegación web y audio; posible buffering en video HD.';
+      case 'POOR':
+        return 'Deficiente: latencia elevada o pérdida de paquetes; no apto para streaming.';
+      case 'CRITICAL':
+        return 'Crítico: conexión severamente degradada; interrupciones frecuentes en la transmisión.';
+      default:
+        return 'Apto para VoIP, streaming y navegación según recomendaciones ITU-T y RFC 2544.';
+    }
+  };
+
+  const primaryPing = latestPingResults.find((p) => p.packetLossPercent < 100 && p.avgRttMs > 0) || latestPingResults[0];
   const badgeStyle = getNetworkBadgeStyle(network.type);
   const qosStyle = getQoSCategoryStyle(latestQoS?.category);
 
@@ -280,7 +297,7 @@ export const DashboardScreen: React.FC = () => {
               </Text>
             </Text>
             <Text style={styles.mosDesc}>
-              Apto para VoIP, streaming 4K y gaming competitivo según RFC 2544
+              {getMosDescription(latestQoS?.category)}
             </Text>
           </View>
         </View>

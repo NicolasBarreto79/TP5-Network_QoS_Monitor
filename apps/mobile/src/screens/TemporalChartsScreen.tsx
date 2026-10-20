@@ -90,7 +90,7 @@ export const TemporalChartsScreen: React.FC = () => {
         title="Latencia RTT Promedio"
         unit="ms"
         data={latencyData}
-        color="#00F0FF"
+        color="#0284C7"
       />
 
       {/* Jitter Chart */}
@@ -98,7 +98,7 @@ export const TemporalChartsScreen: React.FC = () => {
         title="Jitter Interarrival (RFC 3550)"
         unit="ms"
         data={jitterData}
-        color="#F59E0B"
+        color="#D97706"
       />
 
       {/* Throughput Download Chart */}
@@ -106,7 +106,7 @@ export const TemporalChartsScreen: React.FC = () => {
         title="Velocidad de Descarga (Throughput)"
         unit="Mbps"
         data={downloadData}
-        color="#10B981"
+        color="#059669"
       />
 
       {/* Signal Strength RSSI Chart */}
@@ -114,7 +114,7 @@ export const TemporalChartsScreen: React.FC = () => {
         title="Intensidad de Señal Celular (RSSI)"
         unit="dBm"
         data={rssiData}
-        color="#8B5CF6"
+        color="#7C3AED"
       />
     </ScrollView>
   );
@@ -123,7 +123,7 @@ export const TemporalChartsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
   },
   content: {
     padding: 16,
@@ -133,13 +133,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   subtitle: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1.5,
   },
   title: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 22,
     fontWeight: '800',
   },
@@ -150,16 +150,21 @@ const styles = StyleSheet.create({
   },
   filterBtn: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 8,
     borderRadius: 8,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   filterBtnActive: {
-    borderColor: '#00F0FF',
-    backgroundColor: '#00F0FF11',
+    borderColor: '#0284C7',
+    backgroundColor: '#F0F9FF',
   },
   filterBtnText: {
     color: '#64748B',
@@ -167,6 +172,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   filterBtnTextActive: {
-    color: '#00F0FF',
+    color: '#0284C7',
+    fontWeight: '800',
   },
 });

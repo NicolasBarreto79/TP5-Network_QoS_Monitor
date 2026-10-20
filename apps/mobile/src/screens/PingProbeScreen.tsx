@@ -20,16 +20,16 @@ export const PingProbeScreen: React.FC = () => {
 
   const getJitterColor = (jitterMs: number) => {
     if (jitterMs <= 5) return '#10B981'; // Excellent
-    if (jitterMs <= 15) return '#00F0FF'; // Good
-    if (jitterMs <= 35) return '#F59E0B'; // Fair
-    return '#EF4444'; // Poor
+    if (jitterMs <= 15) return '#0284C7'; // Good
+    if (jitterMs <= 35) return '#D97706'; // Fair
+    return '#DC2626'; // Poor
   };
 
   const getRttColor = (rttMs: number) => {
     if (rttMs <= 30) return '#10B981';
-    if (rttMs <= 80) return '#00F0FF';
-    if (rttMs <= 150) return '#F59E0B';
-    return '#EF4444';
+    if (rttMs <= 80) return '#0284C7';
+    if (rttMs <= 150) return '#D97706';
+    return '#DC2626';
   };
 
   return (
@@ -151,7 +151,7 @@ export const PingProbeScreen: React.FC = () => {
       {/* Status feedback */}
       {isTesting && (
         <View style={{ alignItems: 'center', marginBottom: 12 }}>
-          <Text style={{ color: '#00F0FF', fontSize: 13, fontWeight: '600' }}>
+          <Text style={{ color: '#0284C7', fontSize: 13, fontWeight: '700' }}>
             {statusMessage}
           </Text>
         </View>
@@ -164,7 +164,7 @@ export const PingProbeScreen: React.FC = () => {
         disabled={isTesting}
       >
         {isTesting ? (
-          <ActivityIndicator color="#0B0F19" />
+          <ActivityIndicator color="#FFFFFF" />
         ) : (
           <Text style={styles.probeBtnText}>SONDEAR TODOS LOS HOSTS (3x)</Text>
         )}
@@ -176,7 +176,7 @@ export const PingProbeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
   },
   content: {
     padding: 16,
@@ -184,25 +184,31 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 16,
+    marginTop: 8,
   },
   subtitle: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1.5,
   },
   title: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 22,
     fontWeight: '800',
   },
   hostCard: {
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
     marginBottom: 14,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   hostHeader: {
     flexDirection: 'row',
@@ -210,11 +216,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#1F2937',
+    borderBottomColor: '#F1F5F9',
     paddingBottom: 8,
   },
   hostName: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 15,
     fontWeight: '700',
   },
@@ -222,18 +228,19 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontSize: 11,
     marginTop: 2,
+    fontWeight: '500',
   },
   lossBadge: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F8FAFC',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
   },
   lossText: {
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   statsGrid: {
     flexDirection: 'row',
@@ -241,12 +248,12 @@ const styles = StyleSheet.create({
   },
   statBox: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F8FAFC',
     borderRadius: 8,
     padding: 8,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
   },
   statLabel: {
     color: '#64748B',
@@ -261,7 +268,7 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
   statSubValue: {
-    color: '#E2E8F0',
+    color: '#0F172A',
     fontSize: 12,
     fontWeight: '700',
     marginTop: 4,
@@ -270,12 +277,13 @@ const styles = StyleSheet.create({
   statUnit: {
     color: '#64748B',
     fontSize: 9,
+    fontWeight: '600',
   },
   samplesRow: {
     marginTop: 10,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#1E293B',
+    borderTopColor: '#F1F5F9',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -299,44 +307,55 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   sampleText: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 9,
+    fontWeight: '600',
     fontVariant: ['tabular-nums'],
   },
   infoCard: {
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
     marginBottom: 16,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   infoTitle: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1,
     marginBottom: 4,
   },
   infoText: {
-    color: '#94A3B8',
+    color: '#475569',
     fontSize: 11,
     lineHeight: 16,
   },
   probeBtn: {
-    backgroundColor: '#00F0FF',
+    backgroundColor: '#0284C7',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 3,
   },
   probeBtnDisabled: {
     opacity: 0.6,
   },
   probeBtnText: {
-    color: '#0B0F19',
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '900',
+    fontWeight: '800',
     letterSpacing: 1,
   },
 });

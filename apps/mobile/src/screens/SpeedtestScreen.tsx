@@ -77,7 +77,7 @@ export const SpeedtestScreen: React.FC = () => {
       <View style={styles.resultsGrid}>
         <View style={styles.resultCard}>
           <Text style={styles.resultLabel}>DESCARGA (DOWNLOAD)</Text>
-          <Text style={[styles.resultValue, { color: '#00F0FF' }]}>
+          <Text style={[styles.resultValue, { color: '#0284C7' }]}>
             {latestThroughput.download
               ? `${latestThroughput.download.speedMbps.toFixed(2)}`
               : '--'}
@@ -170,7 +170,7 @@ export const SpeedtestScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
   },
   content: {
     padding: 16,
@@ -178,26 +178,32 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 16,
+    marginTop: 8,
   },
   subtitle: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1.5,
   },
   title: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 22,
     fontWeight: '800',
   },
   gaugeContainer: {
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
     alignItems: 'center',
     marginBottom: 16,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 2,
   },
   progressSection: {
     width: '100%',
@@ -207,18 +213,19 @@ const styles = StyleSheet.create({
   progressBarTrack: {
     width: '90%',
     height: 6,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#E2E8F0',
     borderRadius: 3,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#00F0FF',
+    backgroundColor: '#0284C7',
   },
   progressPercent: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 11,
     marginTop: 6,
+    fontWeight: '600',
     fontVariant: ['tabular-nums'],
   },
   resultsGrid: {
@@ -228,12 +235,17 @@ const styles = StyleSheet.create({
   },
   resultCard: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
     alignItems: 'center',
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   resultLabel: {
     color: '#64748B',
@@ -248,7 +260,7 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
   resultUnit: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 12,
     fontWeight: '700',
   },
@@ -259,15 +271,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   configCard: {
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
     marginBottom: 16,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   configTitle: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1,
@@ -280,29 +297,29 @@ const styles = StyleSheet.create({
   },
   payloadBtn: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
   },
   payloadBtnActive: {
-    borderColor: '#00F0FF',
-    backgroundColor: '#00F0FF11',
+    borderColor: '#0284C7',
+    backgroundColor: '#0284C7',
   },
   payloadText: {
-    color: '#94A3B8',
+    color: '#475569',
     fontSize: 12,
     fontWeight: '700',
   },
   payloadTextActive: {
-    color: '#00F0FF',
+    color: '#FFFFFF',
     fontWeight: '800',
   },
   serverInfo: {
     borderTopWidth: 1,
-    borderTopColor: '#1E293B',
+    borderTopColor: '#F1F5F9',
     paddingTop: 8,
     flexDirection: 'row',
     alignItems: 'center',
@@ -314,24 +331,30 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   serverUrl: {
-    color: '#94A3B8',
+    color: '#0F172A',
     fontSize: 11,
+    fontWeight: '600',
     flex: 1,
   },
   startBtn: {
-    backgroundColor: '#00F0FF',
+    backgroundColor: '#0284C7',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 3,
   },
   startBtnDisabled: {
     opacity: 0.6,
   },
   startBtnText: {
-    color: '#0B0F19',
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '900',
+    fontWeight: '800',
     letterSpacing: 1,
   },
 });

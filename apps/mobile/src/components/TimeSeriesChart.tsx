@@ -78,7 +78,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           y1={paddingY}
           x2={chartWidth - paddingX}
           y2={paddingY}
-          stroke="#1E293B"
+          stroke="#E2E8F0"
           strokeDasharray="4 4"
         />
         <Line
@@ -86,7 +86,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           y1={chartHeight / 2}
           x2={chartWidth - paddingX}
           y2={chartHeight / 2}
-          stroke="#1E293B"
+          stroke="#E2E8F0"
           strokeDasharray="4 4"
         />
         <Line
@@ -94,7 +94,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           y1={chartHeight - paddingY}
           x2={chartWidth - paddingX}
           y2={chartHeight - paddingY}
-          stroke="#1E293B"
+          stroke="#CBD5E1"
         />
 
         {/* Data Line */}
@@ -107,7 +107,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
             cx={getX(idx)}
             cy={getY(d.value)}
             r="4"
-            fill="#0F172A"
+            fill="#FFFFFF"
             stroke={color}
             strokeWidth="2"
           />
@@ -124,12 +124,17 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
     marginVertical: 8,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
   },
   header: {
     flexDirection: 'row',
@@ -138,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 13,
     fontWeight: '700',
     textTransform: 'uppercase',
@@ -149,7 +154,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   emptyText: {
-    color: '#64748B',
+    color: '#94A3B8',
     fontSize: 13,
     textAlign: 'center',
     marginTop: 30,
@@ -163,5 +168,6 @@ const styles = StyleSheet.create({
     color: '#64748B',
     fontSize: 11,
     fontVariant: ['tabular-nums'],
+    fontWeight: '600',
   },
 });

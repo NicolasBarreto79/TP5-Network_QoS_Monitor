@@ -28,9 +28,9 @@ export const SpeedGauge: React.FC<SpeedGaugeProps> = ({
   const needleY = cy + needleLength * Math.sin(angleRad);
 
   const getStageColor = () => {
-    if (stage === 'download') return '#00F0FF';
+    if (stage === 'download') return '#0284C7';
     if (stage === 'upload') return '#10B981';
-    if (stage === 'completed') return '#8B5CF6';
+    if (stage === 'completed') return '#7C3AED';
     return '#64748B';
   };
 
@@ -40,7 +40,7 @@ export const SpeedGauge: React.FC<SpeedGaugeProps> = ({
         <Defs>
           <LinearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
             <Stop offset="0%" stopColor="#10B981" />
-            <Stop offset="50%" stopColor="#00F0FF" />
+            <Stop offset="50%" stopColor="#0284C7" />
             <Stop offset="80%" stopColor="#F59E0B" />
             <Stop offset="100%" stopColor="#EF4444" />
           </LinearGradient>
@@ -49,7 +49,7 @@ export const SpeedGauge: React.FC<SpeedGaugeProps> = ({
         {/* Background Track Arc */}
         <Path
           d="M 35 130 A 95 95 0 0 1 225 130"
-          stroke="#1E293B"
+          stroke="#E2E8F0"
           strokeWidth="16"
           strokeLinecap="round"
           fill="none"
@@ -74,7 +74,7 @@ export const SpeedGauge: React.FC<SpeedGaugeProps> = ({
         />
 
         {/* Center Hub */}
-        <Circle cx={cx} cy={cy} r="10" fill="#0F172A" stroke={getStageColor()} strokeWidth="3" />
+        <Circle cx={cx} cy={cy} r="10" fill="#FFFFFF" stroke={getStageColor()} strokeWidth="3" />
       </Svg>
 
       <View style={styles.readoutContainer}>
@@ -107,15 +107,15 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
   },
   unitText: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
     textTransform: 'uppercase',
   },
   stageText: {
-    color: '#CBD5E1',
+    color: '#0F172A',
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
     marginTop: 2,
     letterSpacing: 1.5,
   },

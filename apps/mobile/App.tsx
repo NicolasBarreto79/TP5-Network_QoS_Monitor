@@ -115,31 +115,24 @@ export default function App() {
     }
   };
 
-  const isDashboard = activeTab === 'dashboard';
-
   return (
-    <SafeAreaView style={[styles.safeArea, isDashboard && styles.safeAreaLight]}>
-      <StatusBar
-        barStyle={isDashboard ? 'dark-content' : 'light-content'}
-        backgroundColor={isDashboard ? '#F8FAFC' : '#0B0F19'}
-      />
-      <View style={[styles.container, isDashboard && styles.containerLight]}>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
+      <View style={styles.container}>
         {/* Main Screen Body */}
         <View style={styles.screenContainer}>{renderActiveScreen()}</View>
 
         {/* Bottom Navigation Bar */}
-        <View style={[styles.navBar, isDashboard && styles.navBarLight]}>
+        <View style={styles.navBar}>
           {navItems.map((item) => {
             const isActive = activeTab === item.key;
-            const iconColor = isActive
-              ? (isDashboard ? '#0284C7' : '#00F0FF')
-              : '#64748B';
+            const iconColor = isActive ? '#0284C7' : '#64748B';
             return (
               <TouchableOpacity
                 key={item.key}
                 style={[
                   styles.navItem,
-                  isActive && (isDashboard ? styles.navItemActiveLight : styles.navItemActive),
+                  isActive && styles.navItemActive,
                 ]}
                 onPress={() => setActiveTab(item.key)}
                 activeOpacity={0.7}
@@ -150,7 +143,7 @@ export default function App() {
                 <Text
                   style={[
                     styles.navLabel,
-                    isActive && (isDashboard ? styles.navLabelActiveLight : styles.navLabelActive),
+                    isActive && styles.navLabelActive,
                   ]}
                 >
                   {item.label}
@@ -167,16 +160,10 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0B0F19',
-  },
-  safeAreaLight: {
     backgroundColor: '#F8FAFC',
   },
   container: {
     flex: 1,
-    backgroundColor: '#0B0F19',
-  },
-  containerLight: {
     backgroundColor: '#F8FAFC',
   },
   screenContainer: {
@@ -184,16 +171,17 @@ const styles = StyleSheet.create({
   },
   navBar: {
     flexDirection: 'row',
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#1F2937',
+    borderTopColor: '#E2E8F0',
     paddingVertical: 6,
     paddingHorizontal: 4,
     justifyContent: 'space-around',
-  },
-  navBarLight: {
-    backgroundColor: '#FFFFFF',
-    borderTopColor: '#E2E8F0',
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 4,
   },
   navItem: {
     alignItems: 'center',
@@ -202,9 +190,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   navItemActive: {
-    backgroundColor: '#1E293B',
-  },
-  navItemActiveLight: {
     backgroundColor: '#F0F9FF',
   },
   navIconContainer: {
@@ -219,10 +204,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   navLabelActive: {
-    color: '#00F0FF',
-    fontWeight: '800',
-  },
-  navLabelActiveLight: {
     color: '#0284C7',
     fontWeight: '800',
   },

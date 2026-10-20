@@ -71,7 +71,7 @@ export const SettingsScreen: React.FC = () => {
             autoCapitalize="none"
             autoCorrect={false}
             placeholder="http://10.0.2.2:3000"
-            placeholderTextColor="#64748B"
+            placeholderTextColor="#94A3B8"
           />
           <TouchableOpacity style={styles.saveBtn} onPress={handleSaveBackend}>
             <Text style={styles.saveBtnText}>GUARDAR</Text>
@@ -115,7 +115,7 @@ export const SettingsScreen: React.FC = () => {
             style={[
               styles.testResultText,
               {
-                color: testResult.includes('exitosa') ? '#10B981' : '#EF4444',
+                color: testResult.includes('exitosa') ? '#059669' : '#DC2626',
               },
             ]}
           >
@@ -139,12 +139,12 @@ export const SettingsScreen: React.FC = () => {
               setBgEnabled(val);
               updateSettings({ isBackgroundEnabled: val });
             }}
-            trackColor={{ false: '#1E293B', true: '#00F0FF' }}
-            thumbColor="#F8FAFC"
+            trackColor={{ false: '#CBD5E1', true: '#0284C7' }}
+            thumbColor="#FFFFFF"
           />
         </View>
         <Text style={styles.bgInterval}>
-          Intervalo de sondeo: <Text style={{ color: '#00F0FF' }}>Cada 15 minutos</Text>
+          Intervalo de sondeo: <Text style={{ color: '#0284C7', fontWeight: '700' }}>Cada 15 minutos</Text>
         </Text>
       </View>
 
@@ -194,7 +194,7 @@ export const SettingsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
   },
   content: {
     padding: 16,
@@ -204,26 +204,31 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   subtitle: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1.5,
   },
   title: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 22,
     fontWeight: '800',
   },
   card: {
-    backgroundColor: '#111827',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#1F2937',
+    borderColor: '#E2E8F0',
     marginBottom: 16,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   cardTitle: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0.5,
@@ -241,23 +246,23 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F8FAFC',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    color: '#F8FAFC',
+    color: '#0F172A',
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
     fontSize: 12,
   },
   saveBtn: {
-    backgroundColor: '#00F0FF',
+    backgroundColor: '#0284C7',
     paddingHorizontal: 14,
     borderRadius: 8,
     justifyContent: 'center',
   },
   saveBtnText: {
-    color: '#0B0F19',
+    color: '#FFFFFF',
     fontSize: 11,
     fontWeight: '800',
   },
@@ -268,35 +273,36 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   presetChip: {
-    backgroundColor: '#0B0F19',
+    backgroundColor: '#F1F5F9',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
   },
   presetText: {
-    color: '#94A3B8',
+    color: '#475569',
     fontSize: 10,
+    fontWeight: '600',
   },
   testBtn: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#F0F9FF',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#BAE6FD',
   },
   testBtnText: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   testResultText: {
     fontSize: 11,
     textAlign: 'center',
     marginTop: 8,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   switchRow: {
     flexDirection: 'row',
@@ -304,38 +310,44 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   bgInterval: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 11,
     marginTop: 8,
   },
   thresholdRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#1F2937',
+    borderBottomColor: '#F1F5F9',
   },
   thresholdLabel: {
-    color: '#94A3B8',
+    color: '#64748B',
     fontSize: 11,
+    fontWeight: '600',
   },
   thresholdVal: {
-    color: '#F8FAFC',
+    color: '#0F172A',
     fontSize: 11,
     fontWeight: '800',
     fontVariant: ['tabular-nums'],
   },
   creditsCard: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#1E293B',
+    borderColor: '#E2E8F0',
     alignItems: 'center',
     marginTop: 10,
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   creditsTitle: {
-    color: '#00F0FF',
+    color: '#0284C7',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 1,

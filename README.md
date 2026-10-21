@@ -23,7 +23,32 @@ El sistema mide, almacena, analiza y georreferencia en tiempo real parámetros c
 
 ---
 
-## 2. Matriz de Requisitos Funcionales (RF-01 a RF-09)
+## 2. Demostración Visual y Galería de Pantallas (Modo Claro)
+
+### 2.1. Grabación Demostrativa en Vivo
+Animación interactiva del flujo integral de la aplicación móvil en modo claro luminoso, emulando la resolución y aspecto de un dispositivo móvil (iPhone / Pixel):
+
+<p align="center">
+  <img src="./demo_video.webp" alt="Demostración Completa Network QoS Monitor en Modo Claro" width="380" />
+</p>
+
+### 2.2. Galería de Pantallas de la Aplicación
+
+| Inicio & Dashboard QoS | Velocidad (Speedtest Throughput) | Sondas Multi-Host (RFC 3550) |
+| :---: | :---: | :---: |
+| <img src="./docs/screenshots/01_dashboard.png" width="220" /> | <img src="./docs/screenshots/02_speedtest.png" width="220" /> | <img src="./docs/screenshots/03_sondas.png" width="220" /> |
+
+| Mapa Heatmap de Cobertura | Series Temporales de Sesión | Historial, Alertas & Exportación CSV |
+| :---: | :---: | :---: |
+| <img src="./docs/screenshots/04_heatmap.png" width="220" /> | <img src="./docs/screenshots/05_graficas.png" width="220" /> | <img src="./docs/screenshots/06_historial.png" width="220" /> |
+
+| Ajustes & Diagnóstico de Conexión |
+| :---: |
+| <img src="./docs/screenshots/07_ajustes.png" width="220" /> |
+
+---
+
+## 3. Matriz de Requisitos Funcionales (RF-01 a RF-09)
 
 | ID | Requisito Funcional | Prioridad | Componente / Archivo de Implementación | Estado |
 | :--- | :--- | :---: | :--- | :---: |
@@ -39,7 +64,7 @@ El sistema mide, almacena, analiza y georreferencia en tiempo real parámetros c
 
 ---
 
-## 3. Arquitectura del Sistema
+## 4. Arquitectura del Sistema
 
 El sistema implementa una arquitectura en capas estrictamente desacoplada para garantizar que las ráfagas de paquetes de red y cálculos matemáticos no degraden los 60/120 FPS de la interfaz de usuario:
 
@@ -91,28 +116,38 @@ graph TD
     SQL --> UI
 ```
 
-### 3.1. Native Bridge (Android Kotlin / iOS Swift)
+### 4.1. Native Bridge (Android Kotlin / iOS Swift)
 * **Android (`TelephonyModule.kt`):** Se comunica directamente con `android.telephony.TelephonyManager`. Consulta `allCellInfo` para extraer `CellInfoLte` y `CellInfoNr` (5G), obteniendo RSSI en dBm, RSRP (Reference Signal Received Power), RSRQ, SINR, ASU level, Cell ID y TAC/LAC.
 * **iOS (`TelephonyModule.swift`):** Emplea `CoreTelephony` (`CTTelephonyNetworkInfo`, `CTCarrier`) para resolver el operador y tecnología de acceso radio (`CTRadioAccessTechnologyLTE` / `CTRadioAccessTechnologyNR`).
 
-### 3.2. Measurement Engine (TypeScript)
+### 4.2. Measurement Engine (TypeScript)
 * **Ping & Jitter:** Ejecuta ráfagas de sondeo hacia múltiples hosts simultáneos.
 * **Cálculo de Jitter RFC 3550:**
   $$\Delta = |(R_j - S_j) - (R_i - S_i)| = |RTT_j - RTT_i|$$
   $$J_i = J_{i-1} + \frac{\Delta - J_{i-1}}{16}$$
 * **Throughput:** Utiliza streaming por chunks de alta velocidad con buffers pre-asignados y medición de tiempo en nanosegundos (`process.hrtime` / `performance.now()`).
 
-### 3.3. Persistence Layer (SQLite Repository)
+### 4.3. Persistence Layer (SQLite Repository)
 * Esquema estructurado local con tablas indexadas por timestamp, tecnología de red y coordenadas geográficas.
 * Algoritmo de filtrado espacial por **Bounding Box** ($Lat_{min} \le Lat \le Lat_{max} \land Lon_{min} \le Lon \le Lon_{max}$).
 * Serializador a **CSV estándar RFC 4180** y **JSON con metadatos de auditoría**.
 
 ---
 
-## 4. Estructura del Monorepo
+## 5. Estructura del Monorepo
 
 ```
 TP5 Network_QoS_Monitor/
+├── docs/
+│   └── screenshots/                     # Capturas de pantalla de la app en modo claro
+│       ├── 01_dashboard.png
+│       ├── 02_speedtest.png
+│       ├── 03_sondas.png
+│       ├── 04_heatmap.png
+│       ├── 05_graficas.png
+│       ├── 06_historial.png
+│       └── 07_ajustes.png
+├── demo_video.webp                      # Grabación de demostración completa en modo claro
 ├── apps/
 │   └── mobile/                          # Aplicación Móvil React Native (TypeScript)
 │       ├── android/                     # Módulo Nativo Android en Kotlin
@@ -156,9 +191,9 @@ TP5 Network_QoS_Monitor/
 
 ---
 
-## 5. Instrucciones de Ejecución
+## 6. Instrucciones de Ejecución
 
-### 5.1. Backend de Referencia (Docker o Node.js)
+### 6.1. Backend de Referencia (Docker o Node.js)
 
 **Opción A — Con Docker (Recomendada):**
 ```bash
@@ -183,7 +218,7 @@ Endpoints provistos por el backend:
 
 ---
 
-### 5.2. Ejecución de Pruebas Unitarias Automatizadas
+### 6.2. Ejecución de Pruebas Unitarias Automatizadas
 
 ```bash
 # Ejecutar todas las pruebas (Contracts + Backend + Mobile)
@@ -197,7 +232,7 @@ npm run test:app
 
 ---
 
-### 5.3. Aplicación Móvil (React Native)
+### 6.3. Aplicación Móvil (React Native)
 
 ```bash
 # Iniciar servidor Metro / Expo
@@ -212,7 +247,7 @@ npm run web --workspace @qos-monitor/app
 
 ---
 
-## 6. Análisis de Limitaciones Conocidas y Plataforma
+## 7. Análisis de Limitaciones Conocidas y Plataforma
 
 1. **Restricciones de iOS (CoreTelephony):**
    * Apple restringe por motivos de privacidad de usuario el acceso a las APIs de lectura directa de RSSI/RSRP celular (`CTSignalStrength` privada). En iOS, la aplicación obtiene el operador y tecnología (`CTRadioAccessTechnologyLTE` / `NR`), aplicando una estimación normalizada documentada conforme a la cátedra.
@@ -223,7 +258,7 @@ npm run web --workspace @qos-monitor/app
 
 ---
 
-## 7. Referencias y Bibliografía
+## 8. Referencias y Bibliografía
 
 * **RFC 3550:** *RTP: A Transport Protocol for Real-Time Applications* (Appendix A.8: Estimating the Interarrival Jitter).
 * **RFC 2544:** *Benchmarking Methodology for Network Interconnect Devices*.

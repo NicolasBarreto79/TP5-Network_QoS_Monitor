@@ -113,7 +113,7 @@ describe('Mobile App Unit & Integration Tests', () => {
       };
 
       const progressSamples: number[] = [];
-      const stats = await PingEngine.probeHost(target, 3, (seq, rtt) => {
+      const stats = await PingEngine.probeHost(target, 3, (_seq, rtt) => {
         if (rtt != null) progressSamples.push(rtt);
       });
 

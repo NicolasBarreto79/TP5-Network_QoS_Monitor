@@ -20,7 +20,6 @@ export const SpeedGauge: React.FC<SpeedGaugeProps> = ({
 
   const cx = 130;
   const cy = 130;
-  const r = 95;
 
   // Needle tip
   const needleLength = 80;

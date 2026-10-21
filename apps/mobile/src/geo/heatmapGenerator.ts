@@ -1,7 +1,6 @@
 import { 
   QoSMeasurementRecord, 
   HeatmapPoint, 
-  createHeatmapPoint,
   ConnectionType 
 } from '@qos-monitor/contracts';
 

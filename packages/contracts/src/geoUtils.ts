@@ -1,4 +1,4 @@
-import { GeoPoint, BoundingBox, HeatmapPoint, ConnectionType } from './types.js';
+import { BoundingBox, HeatmapPoint, ConnectionType } from './types.js';
 
 /**
  * Calculates distance between two coordinates in meters using the Haversine formula.

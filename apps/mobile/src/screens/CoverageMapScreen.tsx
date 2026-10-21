@@ -5,14 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Platform,
 } from 'react-native';
 import { useQoSStore } from '../store/useQoSStore';
 import { HeatmapGenerator, HeatmapMetricMode } from '../geo/heatmapGenerator';
 import { ConnectionType } from '@qos-monitor/contracts';
 
 export const CoverageMapScreen: React.FC = () => {
-  const { measurements, currentLocation } = useQoSStore();
+  const { measurements } = useQoSStore();
   const [metricMode, setMetricMode] = useState<HeatmapMetricMode>('QOS_SCORE');
   const [selectedTech, setSelectedTech] = useState<ConnectionType | 'ALL'>('ALL');
   const [selectedPointIndex, setSelectedPointIndex] = useState<number | null>(null);

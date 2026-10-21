@@ -17,7 +17,6 @@ export const DashboardScreen: React.FC = () => {
     isNetworkLoading,
     currentLocation,
     isTesting,
-    activeTestStage,
     statusMessage,
     testProgressPercent,
     latestQoS,

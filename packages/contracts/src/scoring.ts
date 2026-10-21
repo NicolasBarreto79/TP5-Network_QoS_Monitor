@@ -1,10 +1,7 @@
 import { 
   QoSCompoundScore, 
   QoSCategory, 
-  QoSDegradationAlert, 
-  PingStats, 
-  ThroughputResult, 
-  NetworkSnapshot 
+  QoSDegradationAlert 
 } from './types.js';
 
 export interface DegradationThresholds {

@@ -14,7 +14,6 @@ import { useQoSStore } from '../store/useQoSStore';
 export const SettingsScreen: React.FC = () => {
   const {
     backendUrl,
-    pingTargets,
     thresholds,
     isBackgroundEnabled,
     updateSettings,

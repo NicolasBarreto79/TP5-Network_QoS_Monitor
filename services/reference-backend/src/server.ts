@@ -6,7 +6,7 @@ export function createServer() {
   const app = express();
 
   app.use(cors());
-  app.use((req, res, next) => {
+  app.use((_req, res, next) => {
     res.setHeader('X-Powered-By', 'Network-QoS-Monitor-Reference-Backend');
     next();
   });

@@ -19,7 +19,6 @@ export const SpeedtestScreen: React.FC = () => {
     latestThroughput,
     backendUrl,
     downloadSizeMb,
-    uploadSizeMb,
     updateSettings,
     runThroughputTestOnly,
   } = useQoSStore();

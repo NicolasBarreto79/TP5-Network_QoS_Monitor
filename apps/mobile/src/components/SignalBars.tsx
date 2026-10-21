@@ -7,7 +7,7 @@ interface SignalBarsProps {
   theme?: 'light' | 'dark';
 }
 
-export const SignalBars: React.FC<SignalBarsProps> = ({ rssiDbm, networkType, theme = 'light' }) => {
+export const SignalBars: React.FC<SignalBarsProps> = ({ rssiDbm, networkType: _networkType, theme = 'light' }) => {
   const getBarLevel = (dbm?: number | null): number => {
     if (dbm == null) return 3;
     if (dbm >= -70) return 5;
